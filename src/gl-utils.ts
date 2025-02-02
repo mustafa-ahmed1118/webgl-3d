@@ -9,19 +9,33 @@ export function showError(errorText: string) {
     errorBoxDiv.appendChild(errorElement);
   }
 
-  export function createStaticVertexBuffer(gl: WebGL2RenderingContext, data: ArrayBuffer) {
-    const buffer = gl.createBuffer();
-    if (!buffer) {
-      showError('Failed to allocate buffer');
-      return null;
-    }
-  
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-  
-    return buffer;
+export function createStaticVertexBuffer(gl: WebGL2RenderingContext, data: ArrayBuffer) {
+  const buffer = gl.createBuffer();
+  if (!buffer) {
+    showError('Failed to allocate buffer');
+    return null;
   }
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+  return buffer;
+}
+
+export function createStaticIndexBuffer(gl: WebGL2RenderingContext, data: ArrayBuffer) {
+  const buffer = gl.createBuffer();
+  if (!buffer) {
+    showError('Failed to allocate buffer');
+    return null;
+  }
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+  return buffer;
+}
 
 export function createProgram(
     gl: WebGL2RenderingContext,

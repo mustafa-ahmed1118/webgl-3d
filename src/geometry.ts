@@ -50,7 +50,7 @@ export const CUBE_VERTICES = new Float32Array([
     -1.0, 1.0, -1.0,    0, 0, 1  // 23
 ]);
 
-const CUBE_INDICES = new Uint16Array([
+export const CUBE_INDICES = new Uint16Array([
     0, 1, 2, 
     0, 2, 3, // front
     4, 5, 6, 
@@ -70,7 +70,8 @@ const CUBE_INDICES = new Uint16Array([
     - Y transalted down by 1 to be flat on the surface 
     - Color changed to RGB(0.2, 0.2, 0.2) for a grey color
 */
-const TABLE_VERTICES = new Float32Array([
+
+export const TABLE_VERTICES = new Float32Array([
     // Top face
     -10.0, 0.0, -10.0,    0.2, 0.2, 0.2, 
     -10.0, 0.0, 10.0,     0.2, 0.2, 0.2, 
@@ -78,7 +79,7 @@ const TABLE_VERTICES = new Float32Array([
     10.0, 0.0, -10.0,     0.2, 0.2, 0.2, 
 ]);
 
-const TABLE_INDICES = new Float32Array([
+export const TABLE_INDICES = new Float32Array([
     0, 1, 2, 
     0, 2, 3 // top
 ]);
