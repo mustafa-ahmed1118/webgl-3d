@@ -1,5 +1,6 @@
 import { CUBE_INDICES, CUBE_VERTICES, TABLE_INDICES, TABLE_VERTICES, create3dPosColorInterleavedVao } from "./geometry";
 import { createStaticVertexBuffer, createStaticIndexBuffer, getContext, showError, createProgram } from "./gl-utils";
+import { glMatrix, mat4, vec3 } from "gl-matrix";
 
 
 //////////////////////
@@ -32,7 +33,8 @@ void main() {
   outputColor = vec4(fragmentColor, 1.0);
 }`;
 
-function introTo3DDemo(){
+
+   function introTo3DDemo(){
     const canvas = document.getElementById('demo-canvas');
     if(!canvas || !(canvas instanceof HTMLCanvasElement)){
         showError('Could not get canvas reference');
@@ -82,6 +84,44 @@ function introTo3DDemo(){
         return;
     }
     
+    //TEST RENDER
+    canvas.width = canvas.clientWidth * devicePixelRatio;
+    canvas.height = canvas.clientHeight * devicePixelRatio;
+
+    gl.clearColor(0.2, 0.2, 0.2, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST)
+    gl.enable(gl.CULL_FACE)
+    gl.viewport(0,0,canvas.width, canvas.height);
+
+    gl.useProgram(demoProgram);
+
+    const matWorld = mat4.create();
+    const matView = mat4.create();
+    const matProj = mat4.create();
+
+    mat4.lookAt(
+        matView,
+        /*pos = */ vec3.fromValues(5,5,5),
+        /*lookAt = */ vec3.fromValues(0,0,0),
+        /*up = */ vec3.fromValues(0,1,0));
+    
+    mat4.perspective( 
+        matProj,
+        /*fov= */ glMatrix.toRadian(80),
+        /*aspectRation= */ canvas.width/canvas.height,
+        /*near, far= */ 0.1, 100.0);
+
+
+    const matViewProj = mat4.create();
+    mat4.multiply(matViewProj, matProj, matView); //actually multiply the view and proj matrices 
+
+    gl.uniformMatrix4fv(matWorldUniform, false, matWorld);
+    gl.uniformMatrix4fv(matViewProjUniform, false, matViewProj);
+
+    gl.bindVertexArray(cubeVao);
+    gl.drawElements(gl.TRIANGLES, CUBE_INDICES.length, gl.UNSIGNED_SHORT,0);
+
 
 }
 
