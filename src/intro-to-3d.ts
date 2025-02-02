@@ -1,6 +1,6 @@
 import { CUBE_INDICES, CUBE_VERTICES, TABLE_INDICES, TABLE_VERTICES, create3dPosColorInterleavedVao } from "./geometry";
 import { createStaticVertexBuffer, createStaticIndexBuffer, getContext, showError, createProgram } from "./gl-utils";
-import { glMatrix, mat4, vec3 } from "gl-matrix";
+import { glMatrix, mat4, quat, vec3 } from "gl-matrix";
 
 
 //////////////////////
@@ -34,7 +34,44 @@ void main() {
 }`;
 
 
-   function introTo3DDemo(){
+class Shape{
+    private matWorld = mat4.create();
+    private scaleVec = vec3.create();
+    private rotation = quat.create();
+
+    constructor(
+        private pos: vec3,
+        private scale: number,
+        private rotationAxis: vec3,
+        private rotationAngle: number,
+        public readonly vao: WebGLVertexArrayObject,
+        public readonly numIndices: number){}
+
+    draw(gl : WebGL2RenderingContext, matWorldUniform: WebGLUniformLocation){
+
+        //set rotations
+        quat.setAxisAngle(this.rotation, this.rotationAxis, this.rotationAngle);
+
+        //set scaling
+        vec3.set(this.scaleVec, this.scale, this.scale, this.scale);
+
+        //set world view
+        mat4.fromRotationTranslationScale(
+            this.matWorld,
+            /*rotation= */ this.rotation,
+            /*position= */ this.pos,
+            /*scale= */ this.pos);
+
+        gl.uniformMatrix4fv(matWorldUniform, false, this.matWorld);
+        gl.bindVertexArray(this.vao);
+        gl.drawElements(gl.TRIANGLES, this.numIndices, gl.UNSIGNED_SHORT, 0);
+        gl.bindVertexArray(null);
+
+    }
+
+        
+}
+function introTo3DDemo(){
     const canvas = document.getElementById('demo-canvas');
     if(!canvas || !(canvas instanceof HTMLCanvasElement)){
         showError('Could not get canvas reference');
