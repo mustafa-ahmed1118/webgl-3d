@@ -79,7 +79,7 @@ export const TABLE_VERTICES = new Float32Array([
     10.0, 0.0, -10.0,     0.2, 0.2, 0.2, 
 ]);
 
-export const TABLE_INDICES = new Float32Array([
+export const TABLE_INDICES = new Uint16Array([
     0, 1, 2, 
     0, 2, 3 // top
 ]);
@@ -105,7 +105,7 @@ export function create3dPosColorInterleavedVao(
         6 * Float32Array.BYTES_PER_ELEMENT, 0);
     gl.vertexAttribPointer(
         colorAttrib, 3, gl.FLOAT, false, 
-        6 * Float32Array.BYTES_PER_ELEMENT, 0);
+        6 * Float32Array.BYTES_PER_ELEMENT, 3 * Float32Array.BYTES_PER_ELEMENT);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
     //Bind the index buffer
